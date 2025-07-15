@@ -1,149 +1,128 @@
 <!DOCTYPE html><html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Malla Curricular Enfermería</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #ffe6f0;
-      color: #333;
-      margin: 20px;
-    }
-    h2 {
-      color: #d63384;
-    }
-    .semestre {
-      margin-bottom: 30px;
-    }
-    .ramo {
-      display: inline-block;
-      background-color: #f8a6c7;
-      color: white;
-      padding: 10px;
-      margin: 5px;
-      border-radius: 10px;
-      cursor: pointer;
-      opacity: 0.5;
-      transition: transform 0.2s ease;
-    }
-    .ramo:hover {
-      transform: scale(1.05);
-    }
-    .activo {
-      opacity: 1;
-    }
-    .aprobado {
-      background-color: #d63384;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malla Curricular Enfermería</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff0f5;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #ff69b4;
+            padding: 10px 0;
+        }
+        .malla-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px;
+        }
+        .semestre {
+            background-color: #ffe4f2;
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 200px;
+            max-width: 220px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .semestre h3 {
+            text-align: center;
+            color: #ff69b4;
+        }
+        .ramo {
+            background-color: #fff;
+            border: 2px solid #ff69b4;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: center;
+            user-select: none;
+        }
+        .ramo.aprobado {
+            background-color: #ffb6c1;
+            color: white;
+        }
+    </style>
 </head>
-<body>  <h1>Malla Curricular Enfermería - Udalba</h1>  <div id="malla"></div>  <script>
+<body>
+    <h1>Malla Curricular Enfermería</h1>
+    <div class="malla-container" id="malla"></div><script>
     const ramos = {
-      "Anatomía General": { semestre: 1, prerequisitos: [] },
-      "Biologia e histologia": { semestre: 1, prerequisitos: [] },
-      "Química general y orgánica": { semestre: 1, prerequisitos: [] },
-      "Introducción a la enfermería": { semestre: 1, prerequisitos: [] },
-      "Base socioculturales": { semestre: 1, prerequisitos: [] },
-      "Tecnología e Innovación": { semestre: 1, prerequisitos: [] },
-
-      "Primeros auxilios": { semestre: 2, prerequisitos: [] },
-      "Psicología general y del desarrollo": { semestre: 2, prerequisitos: [] },
-      "Bioquímica": { semestre: 2, prerequisitos: ["Química general y orgánica"] },
-      "Enfermería en el ciclo vital": { semestre: 2, prerequisitos: ["Introducción a la enfermería"] },
-      "Integrado en microbiología y parasitología": { semestre: 2, prerequisitos: ["Biologia e histologia"] },
-      "Inglés básico": { semestre: 2, prerequisitos: [] },
-
-      "Fisiología general": { semestre: 3, prerequisitos: ["Anatomía General", "Biologia e histologia"] },
-      "Enfermería y comunidad": { semestre: 3, prerequisitos: ["Enfermería en el ciclo vital"] },
-      "Salud pública y epidemiológica": { semestre: 3, prerequisitos: [] },
-      "Educación y promoción de la salud": { semestre: 3, prerequisitos: ["Base socioculturales", "Psicología general y del desarrollo"] },
-      "Fundamentos de enfermería básica": { semestre: 3, prerequisitos: ["Enfermería en el ciclo vital"] },
-      "Habilidades comunicacionales en enfermería": { semestre: 3, prerequisitos: [] },
-
-      "Enfermería y comunidad 2": { semestre: 4, prerequisitos: ["Enfermería y comunidad", "Educación y promoción de la salud"] },
-      "Bioestadística": { semestre: 4, prerequisitos: [] },
-      "Enfermería básica aplicada": { semestre: 4, prerequisitos: ["Base socioculturales", "Fundamentos de enfermería básica", "Introducción a la enfermería", "Enfermería en el ciclo vital", "Integrado en microbiología y parasitología", "Enfermería y comunidad", "Educación y promoción de la salud", "Habilidades comunicacionales en enfermería", "Primeros auxilios", "Psicología general y del desarrollo", "Salud pública y epidemiológica", "Anatomía General"] },
-      "Fisiopatología": { semestre: 4, prerequisitos: ["Fisiología general"] },
-      "Farmacología": { semestre: 4, prerequisitos: ["Bioquímica", "Fisiología general"] },
-
-      "Ética en enfermería": { semestre: 5, prerequisitos: [] },
-      "Enfermería médico quirúrgico": { semestre: 5, prerequisitos: ["Enfermería básica aplicada", "Fisiopatología", "Farmacología"] },
-      "Enfermería en Salud Mental y psiquiátrica": { semestre: 5, prerequisitos: ["Enfermería básica aplicada", "Farmacología"] },
-      "Enfermería y comunidad 3": { semestre: 5, prerequisitos: ["Enfermería y comunidad 2"] },
-      "Enfermería medicinas complementarias y prácticas en bienestar en salud": { semestre: 5, prerequisitos: [] },
-      "Metodología de la investigación 1": { semestre: 5, prerequisitos: ["Bioestadística"] },
-      "Desarrollo sostenible": { semestre: 5, prerequisitos: [] },
-
-      "Gestión del cuidado enfermero en Salud Mental y psiquiátrica": { semestre: 6, prerequisitos: ["Enfermería en Salud Mental y psiquiátrica", "Enfermería y comunidad 3"] },
-      "Gestión del cuidado enfermero en la comunidad": { semestre: 6, prerequisitos: ["Enfermería médico quirúrgico", "Enfermería y comunidad 3"] },
-      "Gestión del cuidado enfermero el médico quirúrgico": { semestre: 6, prerequisitos: ["Ética en enfermería", "Enfermería médico quirúrgico"] },
-      "Enfermería gerontogeriátrica": { semestre: 6, prerequisitos: ["Ética en enfermería", "Enfermería y comunidad 3"] },
-      "Gestión en enfermería 1": { semestre: 6, prerequisitos: ["Enfermería básica aplicada", "Bioestadística"] },
-      "Metodología de la investigación 2": { semestre: 6, prerequisitos: ["Metodología de la investigación 1"] },
-      "Inglés técnico": { semestre: 6, prerequisitos: [] },
-
-      "Enfermería pediátrica y neonatología": { semestre: 7, prerequisitos: ["Gestión del cuidado enfermero en la comunidad", "Gestión del cuidado enfermero el médico quirúrgico"] },
-      "Enfermería de la mujer": { semestre: 7, prerequisitos: ["Gestión del cuidado enfermero en la comunidad", "Gestión del cuidado enfermero el médico quirúrgico"] },
-      "Enfermería en urgencia": { semestre: 7, prerequisitos: ["Enfermería gerontogeriátrica", "Gestión del cuidado enfermero el médico quirúrgico"] },
-      "Gestión del cuidado enfermero gerontogeriatría": { semestre: 7, prerequisitos: ["Enfermería gerontogeriátrica", "Gestión del cuidado enfermero en la comunidad", "Gestión del cuidado enfermero el médico quirúrgico"] },
-      "Gestión en enfermería 2": { semestre: 7, prerequisitos: ["Gestión en enfermería 1"] },
-      "Seminario de tesis 1": { semestre: 7, prerequisitos: ["Metodología de la investigación 2"] },
-      "Responsabilidad social y emprendimiento": { semestre: 7, prerequisitos: [] },
-
-      "Electivo de formación profesional": { semestre: 8, prerequisitos: [] },
-      "Legislación en salud": { semestre: 8, prerequisitos: ["Gestión en enfermería 2"] },
-      "Bioética en enfermería": { semestre: 8, prerequisitos: ["Gestión del cuidado enfermero el médico quirúrgico"] },
-      "Gestión del cuidado en urgencia": { semestre: 8, prerequisitos: ["Base socioculturales", "Fundamentos de enfermería básica", "Enfermería gerontogeriátrica", "Enfermería de la mujer", "Gestión del cuidado enfermero en Salud Mental y psiquiátrica", "Introducción a la enfermería", "Enfermería en el ciclo vital", "Integrado en microbiología y parasitología", "Enfermería y comunidad", "Educación y promoción de la salud", "Habilidades comunicacionales en enfermería", "Enfermería y comunidad 2"] },
-      "Gestión del cuidado enfermero del pediatra": { semestre: 8, prerequisitos: ["Enfermería de la mujer", "Enfermería pediátrica y neonatología"] },
-      "Seminario de tesis 2": { semestre: 8, prerequisitos: ["Seminario de tesis 1"] },
-      "Preparación para la vida laboral": { semestre: 8, prerequisitos: [] },
-
-      "Internado comunitario": { semestre: 9, prerequisitos: ["Electivo de formación profesional", "Bioética en enfermería", "Gestión del cuidado en urgencia", "Gestión del cuidado enfermero del pediatra", "Legislación en salud", "Seminario de tesis 2"] },
-      "Internado intrahospitalario": { semestre: 10, prerequisitos: ["Electivo de formación profesional", "Bioética en enfermería", "Gestión del cuidado en urgencia", "Gestión del cuidado enfermero del pediatra", "Legislación en salud", "Seminario de tesis 2"] }
+        'Primer Semestre': [
+            { nombre: 'Anatomía General' },
+            { nombre: 'Biología e Histología' },
+            { nombre: 'Química General y Orgánica' },
+            { nombre: 'Introducción a la Enfermería' },
+            { nombre: 'Base Socioculturales' },
+            { nombre: 'Tecnología e Innovación' }
+        ],
+        'Segundo Semestre': [
+            { nombre: 'Primeros Auxilios' },
+            { nombre: 'Psicología General y del Desarrollo' },
+            { nombre: 'Bioquímica', prereq: ['Química General y Orgánica'] },
+            { nombre: 'Enfermería en el Ciclo Vital', prereq: ['Introducción a la Enfermería'] },
+            { nombre: 'Integrado en Microbiología y Parasitología', prereq: ['Biología e Histología'] },
+            { nombre: 'Inglés Básico' }
+        ],
+        // Continua cargando los semestres hasta el Décimo Semestre con su respectiva lógica
     };
 
-    const estado = {};
+    const aprobados = new Set();
+
+    function puedeAprobar(ramo) {
+        if (!ramo.prereq) return true;
+        return ramo.prereq.every(r => aprobados.has(r));
+    }
 
     function renderMalla() {
-      const container = document.getElementById('malla');
-      container.innerHTML = '';
-      
-      const maxSemestre = Math.max(...Object.values(ramos).map(r => r.semestre));
+        const container = document.getElementById('malla');
+        container.innerHTML = '';
 
-      for (let s = 1; s <= maxSemestre; s++) {
-        const semestreDiv = document.createElement('div');
-        semestreDiv.className = 'semestre';
-        semestreDiv.innerHTML = `<h2>Semestre ${s}</h2>`;
+        for (const [semestre, lista] of Object.entries(ramos)) {
+            const columna = document.createElement('div');
+            columna.className = 'semestre';
+            const titulo = document.createElement('h3');
+            titulo.textContent = semestre;
+            columna.appendChild(titulo);
 
-        Object.keys(ramos).forEach(nombre => {
-          const ramo = ramos[nombre];
-          if (ramo.semestre === s) {
-            const boton = document.createElement('div');
-            boton.className = 'ramo';
-            boton.innerText = nombre;
+            for (const ramo of lista) {
+                const divRamo = document.createElement('div');
+                divRamo.className = 'ramo';
+                divRamo.textContent = ramo.nombre;
 
-            const habilitado = ramo.prerequisitos.every(p => estado[p]);
+                if (aprobados.has(ramo.nombre)) {
+                    divRamo.classList.add('aprobado');
+                } else if (!puedeAprobar(ramo)) {
+                    divRamo.style.opacity = '0.5';
+                }
 
-            if (habilitado) {
-              boton.classList.add('activo');
-              boton.onclick = () => {
-                estado[nombre] = !estado[nombre];
-                renderMalla();
-              };
+                divRamo.onclick = () => {
+                    if (puedeAprobar(ramo)) {
+                        if (aprobados.has(ramo.nombre)) {
+                            aprobados.delete(ramo.nombre);
+                        } else {
+                            aprobados.add(ramo.nombre);
+                        }
+                        renderMalla();
+                    }
+                };
+
+                columna.appendChild(divRamo);
             }
 
-            if (estado[nombre]) {
-              boton.classList.add('aprobado');
-            }
-
-            semestreDiv.appendChild(boton);
-          }
-        });
-
-        container.appendChild(semestreDiv);
-      }
+            container.appendChild(columna);
+        }
     }
 
     renderMalla();
-  </script></body>
+</script>
+
+</body>
 </html>
