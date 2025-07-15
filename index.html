@@ -1,24 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-    function guardarAvance() {
-    localStorage.setItem('mallaEnfermeriaAvance', JSON.stringify([...aprobados]));
-    alert('¡Avance guardado!');
-}
 
-function cargarAvance() {
-    const data = localStorage.getItem('mallaEnfermeriaAvance');
-    if (data) {
-        aprobados = new Set(JSON.parse(data));
-        renderMalla();
-        alert('Avance cargado.');
-    } else {
-        alert('No hay avance guardado.');
-    }
-}
-    
-
-document.getElementById('guardarBtn').onclick = guardarAvance;
-document.getElementById('cargarBtn').onclick = cargarAvance;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
