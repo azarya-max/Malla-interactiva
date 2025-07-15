@@ -133,80 +133,51 @@
             ]
         };
 
-        const aprobados = new Set();
+        let aprobados = new Set(JSON.parse(localStorage.getItem('mallaEnfermeriaAvance')) || []);
 
-        function puedeAprobar(ramo) {
-            if (!ramo.prereq) return true;
-            return ramo.prereq.every(r => aprobados.has(r));
-        }
+function renderMalla() {
+    const container = document.getElementById('mallaContainer');
+    container.innerHTML = '';
 
-        function renderMalla() {
-            const container = document.getElementById('malla');
-            container.innerHTML = '';
+    malla.forEach(sem => {
+        const semDiv = document.createElement('div');
+        semDiv.className = 'semestre';
+        const title = document.createElement('h3');
+        title.textContent = sem.semestre;
+        semDiv.appendChild(title);
 
-            for (const [semestre, lista] of Object.entries(ramos)) {
-                const columna = document.createElement('div');
-                columna.className = 'semestre';
-                const titulo = document.createElement('h3');
-                titulo.textContent = semestre;
-                columna.appendChild(titulo);
+        sem.ramos.forEach(ramo => {
+            const ramoDiv = document.createElement('div');
+            ramoDiv.className = 'ramo';
+            ramoDiv.textContent = ramo.nombre;
 
-                for (const ramo of lista) {
-                    const divRamo = document.createElement('div');
-                    divRamo.className = 'ramo';
-                    divRamo.textContent = ramo.nombre;
+            const habilitado = !ramo.prereq || ramo.prereq.every(id => aprobados.has(id));
 
-                    if (aprobados.has(ramo.nombre)) {
-                        divRamo.classList.add('aprobado');
-                    } else if (!puedeAprobar(ramo)) {
-                        divRamo.style.opacity = '0.5';
-                    }
-
-                    divRamo.onclick = () => {
-                        if (puedeAprobar(ramo)) {
-                            if (aprobados.has(ramo.nombre)) {
-                                aprobados.delete(ramo.nombre);
-                            } else {
-                                aprobados.add(ramo.nombre);
-                            }
-                            renderMalla();
-                        }
-                    };
-
-                    columna.appendChild(divRamo);
-                }
-
-                container.appendChild(columna);
+            if (!habilitado && !aprobados.has(ramo.id)) {
+                ramoDiv.style.opacity = 0.4;
+                ramoDiv.style.pointerEvents = 'none';
             }
-        }
 
-function guardarAvance() {
-    localStorage.setItem('mallaEnfermeriaAvance', JSON.stringify([...aprobados]));
+            if (aprobados.has(ramo.id)) {
+                ramoDiv.classList.add('aprobado');
+            }
+
+            ramoDiv.onclick = () => {
+                if (aprobados.has(ramo.id)) {
+                    aprobados.delete(ramo.id);
+                } else {
+                    aprobados.add(ramo.id);
+                }
+                localStorage.setItem('mallaEnfermeriaAvance', JSON.stringify([...aprobados]));  // GUARDADO AUTOMÁTICO
+                renderMalla();
+            };
+
+            semDiv.appendChild(ramoDiv);
+        });
+
+        container.appendChild(semDiv);
+    });
 }
 
-function cargarAvance() {
-    const data = localStorage.getItem('mallaEnfermeriaAvance');
-    if (data) {
-        aprobados = new Set(JSON.parse(data));
-        renderMalla();
-        alert('Avance cargado.');
-    } else {
-        alert('No hay avance guardado.');
-    }
-}
-
-function reiniciarAvance() {
-    if (confirm('¿Seguro que quieres reiniciar tu avance?')) {
-        aprobados.clear();
-        guardarAvance();
-        renderMalla();
-    }
-}
-
-document.getElementById('cargarBtn').onclick = cargarAvance;
-document.getElementById('resetBtn').onclick = reiniciarAvance;
-
-        renderMalla();
-    </script>
-</body>
-</html>
+renderMalla();
+</script>
