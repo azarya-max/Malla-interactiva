@@ -194,17 +194,11 @@ function cargarAvance() {
         alert('No hay avance guardado.');
     }
 }
-
-function reiniciarAvance() {
-    if (confirm('¿Seguro que quieres reiniciar tu avance?')) {
-        aprobados.clear();
-        renderMalla();
-    }
-}
+    
 
 document.getElementById('guardarBtn').onclick = guardarAvance;
 document.getElementById('cargarBtn').onclick = cargarAvance;
-document.getElementById('resetBtn').onclick = reiniciarAvance;
+
         renderMalla();
     </script>
 </body>
