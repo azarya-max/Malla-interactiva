@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Malla Curricular Enfermería</title>
     <style>
         body {
@@ -45,15 +45,41 @@
             cursor: pointer;
             text-align: center;
             user-select: none;
+            transition: background-color 0.3s, color 0.3s;
         }
         .ramo.aprobado {
             background-color: #ffb6c1;
             color: white;
         }
+        .botones {
+            text-align: center;
+            margin: 10px 0 20px 0;
+        }
+        button {
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ff4c8b;
+        }
     </style>
 </head>
 <body>
     <h1>Malla Curricular Enfermería</h1>
+
+    <div class="botones">
+        <button id="guardarBtn">Guardar Avance</button>
+        <button id="cargarBtn">Cargar Avance</button>
+        <button id="resetBtn">Reiniciar</button>
+    </div>
+
     <div class="malla-container" id="malla"></div>
 
     <script>
@@ -133,7 +159,7 @@
             ]
         };
 
-        const aprobados = new Set();
+        let aprobados = new Set();
 
         function puedeAprobar(ramo) {
             if (!ramo.prereq) return true;
@@ -180,7 +206,21 @@
             }
         }
 
-        renderMalla();
-    </script>
-</body>
-</html>
+        function guardarAvance() {
+            localStorage.setItem('mallaAprobados', JSON.stringify(Array.from(aprobados)));
+            alert('Avance guardado!');
+        }
+
+        function cargarAvance() {
+            const data = localStorage.getItem('mallaAprobados');
+            if (data) {
+                aprobados = new Set(JSON.parse(data));
+                alert('Avance cargado!');
+            } else {
+                alert('No hay avance guardado.');
+            }
+            renderMalla();
+        }
+
+        function reiniciarAvance() {
+            if (confirm('¿Seguro que quieres reiniciar tu avance?')) {
