@@ -186,32 +186,8 @@ function renderMalla() {
         });
 
         container.appendChild(semDiv);
-    });
-}
 
-function guardarAvance() {
-    localStorage.setItem('mallaEnfermeriaAvance', JSON.stringify([...aprobados]));
-    alert('¡Avance guardado!');
 }
-
-function cargarAvance() {
-    const data = localStorage.getItem('mallaEnfermeriaAvance');
-    if (data) {
-        aprobados = new Set(JSON.parse(data));
-        renderMalla();
-        alert('Avance cargado.');
-    } else {
-        alert('No hay avance guardado.');
-    }
-}
-
-function reiniciarAvance() {
-    if (confirm('¿Seguro que quieres reiniciar tu avance?')) {
-        aprobados.clear();
-        renderMalla();
-    }
-}
-
 
 renderMalla();
 </script></body>
