@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,76 +54,133 @@
 </head>
 <body>
     <h1>Malla Curricular Enfermería</h1>
-    <div class="malla-container" id="malla"></div><script>
-    const ramos = {
-        'Primer Semestre': [
-            { nombre: 'Anatomía General' },
-            { nombre: 'Biología e Histología' },
-            { nombre: 'Química General y Orgánica' },
-            { nombre: 'Introducción a la Enfermería' },
-            { nombre: 'Base Socioculturales' },
-            { nombre: 'Tecnología e Innovación' }
-        ],
-        'Segundo Semestre': [
-            { nombre: 'Primeros Auxilios' },
-            { nombre: 'Psicología General y del Desarrollo' },
-            { nombre: 'Bioquímica', prereq: ['Química General y Orgánica'] },
-            { nombre: 'Enfermería en el Ciclo Vital', prereq: ['Introducción a la Enfermería'] },
-            { nombre: 'Integrado en Microbiología y Parasitología', prereq: ['Biología e Histología'] },
-            { nombre: 'Inglés Básico' }
-        ],
-        // Continua cargando los semestres hasta el Décimo Semestre con su respectiva lógica
-    };
+    <div class="malla-container" id="malla"></div>
 
-    const aprobados = new Set();
+    <script>
+        const ramos = {
+            'Primer Semestre': [
+                { nombre: 'Anatomía General' },
+                { nombre: 'Biología e Histología' },
+                { nombre: 'Química General y Orgánica' },
+                { nombre: 'Introducción a la Enfermería' },
+                { nombre: 'Base Socioculturales' },
+                { nombre: 'Tecnología e Innovación' }
+            ],
+            'Segundo Semestre': [
+                { nombre: 'Primeros Auxilios' },
+                { nombre: 'Psicología General y del Desarrollo' },
+                { nombre: 'Bioquímica', prereq: ['Química General y Orgánica'] },
+                { nombre: 'Enfermería en el Ciclo Vital', prereq: ['Introducción a la Enfermería'] },
+                { nombre: 'Integrado en Microbiología y Parasitología', prereq: ['Biología e Histología'] },
+                { nombre: 'Inglés Básico' }
+            ],
+            'Tercer Semestre': [
+                { nombre: 'Fisiología General', prereq: ['Anatomía General', 'Biología e Histología'] },
+                { nombre: 'Enfermería y Comunidad', prereq: ['Enfermería en el Ciclo Vital'] },
+                { nombre: 'Salud Pública y Epidemiológica' },
+                { nombre: 'Educación y Promoción de la Salud', prereq: ['Base Socioculturales', 'Psicología General y del Desarrollo'] },
+                { nombre: 'Fundamentos de Enfermería Básica', prereq: ['Enfermería en el Ciclo Vital'] },
+                { nombre: 'Habilidades Comunicacionales en Enfermería' }
+            ],
+            'Cuarto Semestre': [
+                { nombre: 'Enfermería y Comunidad 2', prereq: ['Enfermería y Comunidad', 'Educación y Promoción de la Salud'] },
+                { nombre: 'Bioestadística' },
+                { nombre: 'Enfermería Básica Aplicada', prereq: ['Base Socioculturales', 'Fundamentos de Enfermería Básica', 'Introducción a la Enfermería', 'Enfermería en el Ciclo Vital', 'Integrado en Microbiología y Parasitología', 'Enfermería y Comunidad', 'Educación y Promoción de la Salud', 'Habilidades Comunicacionales en Enfermería', 'Primeros Auxilios', 'Psicología General y del Desarrollo', 'Salud Pública y Epidemiológica', 'Anatomía General'] },
+                { nombre: 'Fisiopatología', prereq: ['Fisiología General'] },
+                { nombre: 'Farmacología', prereq: ['Bioquímica', 'Fisiología General'] }
+            ],
+            'Quinto Semestre': [
+                { nombre: 'Ética en Enfermería' },
+                { nombre: 'Enfermería Médico Quirúrgico', prereq: ['Enfermería Básica Aplicada', 'Fisiopatología', 'Farmacología'] },
+                { nombre: 'Enfermería en Salud Mental y Psiquiátrica', prereq: ['Enfermería Básica Aplicada', 'Farmacología'] },
+                { nombre: 'Enfermería y Comunidad 3', prereq: ['Enfermería y Comunidad 2'] },
+                { nombre: 'Enfermería Medicinas Complementarias y Prácticas en Bienestar en Salud' },
+                { nombre: 'Metodología de la Investigación 1', prereq: ['Bioestadística'] },
+                { nombre: 'Desarrollo Sostenible' }
+            ],
+            'Sexto Semestre': [
+                { nombre: 'Gestión del Cuidado Enfermero en Salud Mental y Psiquiátrica', prereq: ['Enfermería en Salud Mental y Psiquiátrica', 'Enfermería y Comunidad 3'] },
+                { nombre: 'Gestión del Cuidado Enfermero en la Comunidad', prereq: ['Enfermería Médico Quirúrgico', 'Enfermería y Comunidad 3'] },
+                { nombre: 'Gestión del Cuidado Enfermero Médico Quirúrgico', prereq: ['Ética en Enfermería', 'Enfermería Médico Quirúrgico'] },
+                { nombre: 'Enfermería Gerontogeriátrica', prereq: ['Ética en Enfermería', 'Enfermería y Comunidad 3'] },
+                { nombre: 'Gestión en Enfermería 1', prereq: ['Enfermería Básica Aplicada', 'Bioestadística'] },
+                { nombre: 'Metodología de la Investigación 2', prereq: ['Metodología de la Investigación 1'] },
+                { nombre: 'Inglés Técnico' }
+            ],
+            'Séptimo Semestre': [
+                { nombre: 'Enfermería Pediátrica y Neonatología', prereq: ['Gestión del Cuidado Enfermero en la Comunidad', 'Gestión del Cuidado Enfermero Médico Quirúrgico'] },
+                { nombre: 'Enfermería de la Mujer', prereq: ['Gestión del Cuidado Enfermero en la Comunidad', 'Gestión del Cuidado Enfermero Médico Quirúrgico'] },
+                { nombre: 'Enfermería en Urgencia', prereq: ['Enfermería Gerontogeriátrica', 'Gestión del Cuidado Enfermero Médico Quirúrgico'] },
+                { nombre: 'Gestión del Cuidado Enfermero Gerontogeriatría', prereq: ['Enfermería Gerontogeriátrica', 'Gestión del Cuidado Enfermero en la Comunidad', 'Gestión del Cuidado Enfermero Médico Quirúrgico'] },
+                { nombre: 'Gestión en Enfermería 2', prereq: ['Gestión en Enfermería 1'] },
+                { nombre: 'Seminario de Tesis 1', prereq: ['Metodología de la Investigación 2'] },
+                { nombre: 'Responsabilidad Social y Emprendimiento' }
+            ],
+            'Octavo Semestre': [
+                { nombre: 'Electivo de Formación Profesional' },
+                { nombre: 'Legislación en Salud', prereq: ['Gestión en Enfermería 2'] },
+                { nombre: 'Bioética en Enfermería', prereq: ['Gestión del Cuidado Enfermero Médico Quirúrgico'] },
+                { nombre: 'Gestión del Cuidado en Urgencia', prereq: ['Base Socioculturales', 'Fundamentos de Enfermería Básica', 'Enfermería Gerontogeriátrica', 'Enfermería de la Mujer', 'Gestión del Cuidado Enfermero en Salud Mental y Psiquiátrica', 'Introducción a la Enfermería', 'Enfermería en el Ciclo Vital', 'Integrado en Microbiología y Parasitología', 'Enfermería y Comunidad', 'Educación y Promoción de la Salud', 'Habilidades Comunicacionales en Enfermería', 'Enfermería y Comunidad 2'] },
+                { nombre: 'Gestión del Cuidado Enfermero del Pediatra', prereq: ['Enfermería de la Mujer', 'Enfermería Pediátrica y Neonatología'] },
+                { nombre: 'Seminario de Tesis 2', prereq: ['Seminario de Tesis 1'] },
+                { nombre: 'Preparación para la Vida Laboral' }
+            ],
+            'Noveno Semestre': [
+                { nombre: 'Internado Comunitario', prereq: ['Electivo de Formación Profesional', 'Bioética en Enfermería', 'Gestión del Cuidado en Urgencia', 'Gestión del Cuidado Enfermero del Pediatra', 'Legislación en Salud', 'Seminario de Tesis 2'] }
+            ],
+            'Décimo Semestre': [
+                { nombre: 'Internado Intrahospitalario', prereq: ['Electivo de Formación Profesional', 'Bioética en Enfermería', 'Gestión del Cuidado en Urgencia', 'Gestión del Cuidado Enfermero del Pediatra', 'Legislación en Salud', 'Seminario de Tesis 2'] }
+            ]
+        };
 
-    function puedeAprobar(ramo) {
-        if (!ramo.prereq) return true;
-        return ramo.prereq.every(r => aprobados.has(r));
-    }
+        const aprobados = new Set();
 
-    function renderMalla() {
-        const container = document.getElementById('malla');
-        container.innerHTML = '';
+        function puedeAprobar(ramo) {
+            if (!ramo.prereq) return true;
+            return ramo.prereq.every(r => aprobados.has(r));
+        }
 
-        for (const [semestre, lista] of Object.entries(ramos)) {
-            const columna = document.createElement('div');
-            columna.className = 'semestre';
-            const titulo = document.createElement('h3');
-            titulo.textContent = semestre;
-            columna.appendChild(titulo);
+        function renderMalla() {
+            const container = document.getElementById('malla');
+            container.innerHTML = '';
 
-            for (const ramo of lista) {
-                const divRamo = document.createElement('div');
-                divRamo.className = 'ramo';
-                divRamo.textContent = ramo.nombre;
+            for (const [semestre, lista] of Object.entries(ramos)) {
+                const columna = document.createElement('div');
+                columna.className = 'semestre';
+                const titulo = document.createElement('h3');
+                titulo.textContent = semestre;
+                columna.appendChild(titulo);
 
-                if (aprobados.has(ramo.nombre)) {
-                    divRamo.classList.add('aprobado');
-                } else if (!puedeAprobar(ramo)) {
-                    divRamo.style.opacity = '0.5';
+                for (const ramo of lista) {
+                    const divRamo = document.createElement('div');
+                    divRamo.className = 'ramo';
+                    divRamo.textContent = ramo.nombre;
+
+                    if (aprobados.has(ramo.nombre)) {
+                        divRamo.classList.add('aprobado');
+                    } else if (!puedeAprobar(ramo)) {
+                        divRamo.style.opacity = '0.5';
+                    }
+
+                    divRamo.onclick = () => {
+                        if (puedeAprobar(ramo)) {
+                            if (aprobados.has(ramo.nombre)) {
+                                aprobados.delete(ramo.nombre);
+                            } else {
+                                aprobados.add(ramo.nombre);
+                            }
+                            renderMalla();
+                        }
+                    };
+
+                    columna.appendChild(divRamo);
                 }
 
-                divRamo.onclick = () => {
-                    if (puedeAprobar(ramo)) {
-                        if (aprobados.has(ramo.nombre)) {
-                            aprobados.delete(ramo.nombre);
-                        } else {
-                            aprobados.add(ramo.nombre);
-                        }
-                        renderMalla();
-                    }
-                };
-
-                columna.appendChild(divRamo);
+                container.appendChild(columna);
             }
-
-            container.appendChild(columna);
         }
-    }
 
-    renderMalla();
-</script>
-
+        renderMalla();
+    </script>
 </body>
 </html>
